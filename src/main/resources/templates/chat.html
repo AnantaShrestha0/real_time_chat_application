@@ -8,7 +8,21 @@
   <title>Realtime Chat App</title>
   <link rel="stylesheet" th:href="@{/css/style.css}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
-  
+  <style>
+ /** .typing-area input[type="submit"] {
+    color: #fff;
+    width: 55px;
+    border: none;
+    outline: none;
+    background: #333;
+    font-size: 19px;
+    cursor: pointer;
+    opacity: 0.7;
+    pointer-events: none;
+    border-radius: 0 5px 5px 0;
+    transition: all 0.3s ease;
+}**/
+    </style>
 
 </head>
 
@@ -26,21 +40,75 @@
       </header>
       <div class="chat-box">
 
+
+
+<div th:if="${chatlist.isEmpty()}">
+    <!-- Code to execute if the list is empty -->
+    <div class="text">No messages are available. Once you send message they will appear here.</div>
+</div>
+       
+<div th:unless="${chatlist.isEmpty()}">
+   <div th:each="row : ${chatlist}">
+   
+    <div th:if="${row.outgoingMsgId == user.userid}">
+        <div class="chat outgoing">
+            <div class="details">
+                <p th:text="${row.msg}"></p>
+            </div>
+        </div>
+    </div>
+    
+    <div th:unless="${row.outgoingMsgId == user.userid}">
+        <div class="chat incoming">
+            <div class="details">
+          <!-- <img th:src="@{/images/__${row.image}__}" alt="">-->
+                <p th:text="${row.msg}"></p>
+            </div>
+        </div>
+    </div>
+    
+</div>
+</div>
+   
+    
+        
+
+
+
+
+
+
       </div>
       <form action="/sendMessage" method="post" class="typing-area">
-       
-        <input type="text" name="message" class="input-field" placeholder="Type a message here...">
+      <input type="hidden" name="incomeMsgId" th:value="${person.userid}">
+        <input type="hidden" name="outgoingMsgId" th:value="${user.userid}">
+        <input type="hidden" name="personid" th:value="${person.id}">
+        <input type="text" name="msg" class="input-field" placeholder="Type a message here...">
         
-        <button type="submit">
-        <i class="fab fa-telegram-plane"></i>
-       </button>
+      <input type="submit" value="submit">
     
       </form>
     </section>
   </div>
   
-    <script th:src="@{/javascript/chat.js}"></script>
+  
+       
+   <script>
+ // Function to refresh the page after a certain interval
+    // function refreshPage() {
+      // location.reload();
+   //  }
+
+    // Set the interval (in milliseconds) for refreshing the page
+   // const refreshInterval = 10000; // Refresh every 5 seconds
+//    setTimeout(refreshPage, refreshInterval);
+   
+    
+    
+  
 
 
+    </script>
+          <script th:src="@{/javascript/chat.js}"></script>
 </body>
 </html>
